@@ -5,13 +5,21 @@ build/
 dist/
 wheels/
 *.egg-info
+.ruff_cache
+.ipynb_checkpoints
 
 # Models
 *.pt
-
 
 # Virtual environments
 .venv
 
 # Editor
 .ropeproject
+
+# Dataset
+zipped_data
+CricketEC
+CricketEC-train-test-val
+weights
+Keypoints

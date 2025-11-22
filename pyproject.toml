@@ -10,3 +10,11 @@ dependencies = [
     "torchvision>=0.24.1",
     "ultralytics>=8.3.228",
 ]
+
+[tool]
+
+[tool.pyrefly]
+project-includes = [
+    "**/*.py*",
+    "**/*.ipynb",
+]
