@@ -8,7 +8,6 @@ from dataset import FrameSampling, get_dataloaders
 from models.cricket_ec_model import CricketECModel, BackboneType, MotionType
 from torchvision.transforms import v2
 from train import train_model
-import re
 
 
 @dataclass

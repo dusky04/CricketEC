@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 import torch
 from torch import nn
@@ -35,8 +35,8 @@ def train_model(
             train_dataloader, desc=f"Processing Epoch: {epoch + 1:02d}"
         )
         for batch_idx, (videos, labels) in enumerate(batch_iterator):
-            videos = videos.to(device, non_blocking = True)
-            labels = labels.to(device, non_blocking = True)
+            videos = videos.to(device, non_blocking=True)
+            labels = labels.to(device, non_blocking=True)
 
             optimizer.zero_grad(set_to_none=True)
 
