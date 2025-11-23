@@ -44,7 +44,13 @@ def train_model(
             loss = loss_fn(outputs, labels)
 
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+
+            # Debug: Check the "natural" size of the step
+            total_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            if batch_idx % 50 == 0:
+                print(f"Grad Norm: {total_norm:.2f}") # Is this consistently 5.0, 10.0, 20.0?
+            # torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+
             optimizer.step()
 
             running_loss += loss.item() * videos.size(0)
