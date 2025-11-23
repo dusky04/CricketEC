@@ -91,7 +91,6 @@ class CricketEC(Dataset):
 
         # video = torch.load(self.video_paths[index], map_location="cpu")
 
-
         # if video.dtype == torch.uint8:
         #     video = video.float() / 255.0
 
@@ -113,7 +112,7 @@ class KeypointsDataset(Dataset):
     ) -> None:
         self.dataset_dir = dir
         # paths of all the videos present in the dataset - label / video.avi
-        self.feature_paths = list(dir.rglob("*.pt"))
+        self.feature_paths = list(dir.rglob("*.py"))
         self.class_names, self.class_to_idx = get_classes(dir)
         self.transform = transform
         # self.sampling = sampling
