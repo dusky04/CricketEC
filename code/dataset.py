@@ -45,51 +45,59 @@ class CricketEC(Dataset):
     def __len__(self) -> int:
         return len(self.video_paths)
 
-    # def load_video_frames(self, idx: int) -> torch.Tensor:
-        # vr = VideoReader(str(self.video_paths[idx]))
-        # video_path = self.video_paths[idx]
+    def load_video_frames(self, idx: int) -> torch.Tensor:
+        vr = VideoReader(str(self.video_paths[idx]))
+        video_path = self.video_paths[idx]
 
-        # indices = []
-        # match self.sampling:
-        #     case FrameSampling.UNIFORM:
-        #         indices = torch.linspace(
-        #             0, len(vr) - 1, self.config.NUM_FRAMES, dtype=torch.float32
-        #         ).tolist()
-        #     case FrameSampling.JITTERED:
-        #         raise NotImplementedError
-        #     case FrameSampling.PIXEL_INTENSITY:
-        #         if self.index_map is None:
-        #             raise FileNotFoundError("INDEX MAP NOT LOADING")
+        indices = []
+        match self.sampling:
+            case FrameSampling.UNIFORM:
+                indices = torch.linspace(
+                    0, len(vr) - 1, self.config.NUM_FRAMES, dtype=torch.float32
+                ).tolist()
+            case FrameSampling.JITTERED:
+                raise NotImplementedError
+            case FrameSampling.PIXEL_INTENSITY:
+                if self.index_map is None:
+                    raise FileNotFoundError("INDEX MAP NOT LOADING")
 
-        #         key = str(video_path.relative_to(self.dataset_dir.parent)).replace(
-        #             "\\", "/"
-        #         )
+                key = str(video_path.relative_to(self.dataset_dir.parent)).replace(
+                    "\\", "/"
+                )
 
-        #         if key not in self.index_map:
-        #             raise KeyError(f"Video {key} not found in pre-computed index map.")
+                if key not in self.index_map:
+                    raise KeyError(f"Video {key} not found in pre-computed index map.")
 
-        #         indices = self.index_map[key]
+                indices = self.index_map[key]
 
-        #         if len(indices) != self.config.NUM_FRAMES:
-        #             if len(indices) > self.config.NUM_FRAMES:
-        #                 indices = indices[: self.config.NUM_FRAMES]
-        #             elif len(indices) < self.config.NUM_FRAMES:
-        #                 indices += [indices[-1]] * (
-        #                     self.config.NUM_FRAMES - len(indices)
-        #                 )
+                if len(indices) != self.config.NUM_FRAMES:
+                    if len(indices) > self.config.NUM_FRAMES:
+                        indices = indices[: self.config.NUM_FRAMES]
+                    elif len(indices) < self.config.NUM_FRAMES:
+                        indices += [indices[-1]] * (
+                            self.config.NUM_FRAMES - len(indices)
+                        )
 
-        # frames = torch.from_numpy(vr.get_batch(indices=indices).asnumpy()).permute(
-        #     0, 3, 1, 2
-        # )
-        # if self.transform:
-        #     return self.transform(frames)
-        # return frames
+        frames = torch.from_numpy(vr.get_batch(indices=indices).asnumpy()).permute(
+            0, 3, 1, 2
+        )
+        if self.transform:
+            return self.transform(frames)
+        return frames
 
     def __getitem__(self, index: int) -> Tuple[torch.Tensor, int]:
         if self.config.NUM_FRAMES > 32:
             raise Exception("CANT HANDLE 32 FRAMES")
 
-        video = torch.load(self.video_paths[index], map_location="cpu")
+        # video = torch.load(self.video_paths[index], map_location="cpu")
+
+
+        # if video.dtype == torch.uint8:
+        #     video = video.float() / 255.0
+
+        # if self.transform:
+        #     video = self.transform(video)
+        video = self.load_video_frames(index)
         label = self.video_paths[index].parent.name
         label_idx = self.class_to_idx[label]
         return video, label_idx

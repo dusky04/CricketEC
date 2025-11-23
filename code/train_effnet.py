@@ -78,11 +78,18 @@ if __name__ == "__main__":
     # Define parameter groups with different learning rates
     optimizer = torch.optim.AdamW(
         [
+            # Fine-tune backbone with lower LR
             {"params": model.feature_extractor.parameters(), "lr": 1e-4},
+            # Train the new LSTM/GRU and Classifier with main LR
+            {"params": model.motion_classifier.parameters()},
+            {"params": model.layer_norm.parameters()},
+            {"params": model.attention_pool.parameters()},
+            {"params": model.linear.parameters()},
         ],
         lr=c.LR,
         weight_decay=c.WEIGHT_DECAY,
     )
+
 
     # lr-scheduler
 
