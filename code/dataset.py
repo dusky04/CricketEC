@@ -27,7 +27,7 @@ class CricketEC(Dataset):
     ) -> None:
         self.dataset_dir = dir
         # paths of all the videos present in the dataset - label / video.avi
-        self.video_paths = list(dir.rglob("*.pt"))
+        self.video_paths = list(dir.rglob("*.avi"))
         self.class_names, self.class_to_idx = get_classes(dir)
         self.transform = transform
         self.sampling = sampling
