@@ -46,10 +46,12 @@ if __name__ == "__main__":
         [
             v2.ToDtype(torch.float32, scale=True),
             v2.RandomResizedCrop(size=(224, 224), scale=(0.85, 1.0), antialias=True),
+            v2.RandomRotation(degrees=15),
             v2.RandomHorizontalFlip(p=0.5),
             v2.ColorJitter(0.2, 0.2, 0.2, 0.1),
-            v2.RandomErasing(p=0.2, scale=(0.02, 0.2)),
+            v2.RandomGrayscale(p=0.2),
             v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            v2.RandomErasing(p=0.2, scale=(0.02, 0.2)),
         ]
     )
     test_transform = v2.Compose(

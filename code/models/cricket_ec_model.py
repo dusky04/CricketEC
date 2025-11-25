@@ -13,7 +13,7 @@ class BackboneType(Enum):
 
 class MotionType(Enum):
     LSTM = 0
-    GRU  = 0
+    GRU = 0
 
 
 class CricketECModel(nn.Module):

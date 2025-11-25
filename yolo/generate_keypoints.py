@@ -1,9 +1,7 @@
 # generates the keypoints for pose estimation of
 # `PULL` and `HOOK` shots
 
-from pathlib import Path
 
-import torch
 from ultralytics import YOLO
 
 YOLO_PATH = "yolo/yolo-weights.pt"
