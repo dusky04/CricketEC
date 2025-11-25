@@ -22,8 +22,8 @@ class C:
     LSTM_DROPOUT = 0.3
     FC_DROPOUT = 0.4
     TRAIN_SIZE = 0.8
-    NUM_WORKERS = 10
-    PREFETCH_FACTOR = 10
+    NUM_WORKERS = 4
+    PREFETCH_FACTOR = 6
     NUM_EPOCHS = 20
     WEIGHT_DECAY = 1e-4
 
@@ -72,13 +72,17 @@ if __name__ == "__main__":
     ).to(device)
 
     # loss function
-    loss_fn = nn.CrossEntropyLoss()
+    loss_fn = nn.CrossEntropyLoss(label_smoothing=0.1)
 
     # optimizer
     # Define parameter groups with different learning rates
     optimizer = torch.optim.AdamW(
         [
             {"params": model.feature_extractor.parameters(), "lr": 1e-4},
+            {"params": model.motion_classifier.parameters()},
+            {"params": model.layer_norm.parameters()},
+            {"params": model.attention_pool.parameters()},
+            {"params": model.linear.parameters()},
         ],
         lr=c.LR,
         weight_decay=c.WEIGHT_DECAY,

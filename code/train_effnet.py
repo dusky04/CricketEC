@@ -73,7 +73,7 @@ if __name__ == "__main__":
     ).to(device)
 
     # loss function
-    loss_fn = nn.CrossEntropyLoss()
+    loss_fn = nn.CrossEntropyLoss(label_smoothing=0.1)
 
     # optimizer
     # Define parameter groups with different learning rates
